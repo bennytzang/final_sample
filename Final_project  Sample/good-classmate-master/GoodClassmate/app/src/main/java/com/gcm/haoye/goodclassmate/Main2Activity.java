@@ -110,6 +110,7 @@ public class Main2Activity extends Activity {
                 int mYear, mMonth, mDay;
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
+                mMonth = mMonth + 1;
                 mDay = c.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog dialog = new DatePickerDialog(
                         Main2Activity.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth,mDateSetListener,mYear,mMonth,mDay);
