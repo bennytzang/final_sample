@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.spinner_test.db.MyDBHelper;
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Showing selected spinner item
         Toast.makeText(parent.getContext(), "You selected: " + label,
                 Toast.LENGTH_LONG).show();
+
+        TextView txv = (TextView)findViewById(R.id.txv);
+        txv.setText(label);
 
     }
 
