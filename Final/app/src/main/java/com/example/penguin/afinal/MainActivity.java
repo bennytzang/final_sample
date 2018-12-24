@@ -2,11 +2,13 @@ package com.example.penguin.afinal;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     protected static final String DB_NAME = "HotlineDB";
@@ -38,9 +41,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Func();
     }
 
+
     private View.OnClickListener ClsBtn = new View.OnClickListener(){
         public void onClick(View v){
-            MainActivity.this.onDestory();
+            AlertDialog.Builder bdr = new AlertDialog.Builder(MainActivity.this);
+                    bdr.setTitle("Accounting_Manager (Beta)");
+                    bdr.setIcon(R.mipmap.ic_launcher);
+                    bdr.setCancelable(false);
+                    bdr.setMessage("您即將離開程式");
+                    bdr.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.this.onDestory();
+                        }
+                    });
+                    bdr.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    bdr.show();
         }
     };
 
@@ -62,9 +83,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if(v.getId()==R.id.btUpdate) {
             /* 按更新鈕 */
             update(nameStr, phoneStr, textStr, cur.getInt(0));
+            Toast.makeText(getApplicationContext(),"更新了一筆資料",Toast.LENGTH_SHORT).show();
         } else {
             /* 按新增鈕 */
             addData(nameStr, phoneStr, textStr);
+            Toast.makeText(getApplicationContext(),"新增了一筆資料",Toast.LENGTH_SHORT).show();
         }
         requery(); /* 更新 Cursor 內容 */
     }
@@ -155,6 +178,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             addData("交通","100","加油");
             addData("雜支","200","會費");
             addData("娛樂","300","電影");
+
+            AlertDialog.Builder bdr = new AlertDialog.Builder(this);
+            bdr.setTitle("Accounting_Manager (Beta)");
+            bdr.setMessage("由於Database內部無資料\n"+"將自動匯入預設資料\n" + "請按任意鍵返回程式");
+            bdr.setIcon(R.mipmap.ic_launcher);
+            bdr.setCancelable(true);
+            bdr.show();
         }
 
         adapter = new SimpleCursorAdapter(this,
@@ -183,6 +213,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         /* 刪除鈕的 On Click 事件方法 */
                         db.delete( TB_NAME, "_id=" + cur.getInt(0),null);
                         requery();
+                        Toast.makeText(getApplicationContext(),"刪除了一筆資料",Toast.LENGTH_SHORT).show();
+
                     }
                 }
         );
@@ -208,6 +240,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 cost +=Integer.parseInt(str);
                             }while (cur.moveToNext());
                         }money.setText("共"+ cost + "元");
+                        AlertDialog.Builder bdr = new AlertDialog.Builder(MainActivity.this);
+                        bdr.setTitle("總共有" + cur.getCount() + "筆資料");
+                        bdr.setCancelable(true);
+                        bdr.setMessage("共"+ cost + "元");
+                        bdr.show();
+
                         cost = 0;
                     }
 
@@ -230,12 +268,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 total.setText("已清除資料");
                                 money.setText("已清除資料");
                                 cost = 0;
+
+                                Toast.makeText(getApplicationContext(),"資料已全部清除",Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     }
                 }
         );
 
-}
 
+}
 }
